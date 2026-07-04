@@ -9,21 +9,21 @@
 // Wait until the HTML document has been fully loaded and parsed before running any scripts
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ---------- Icons Initialization ----------
+  // Icons Initialization
   // Check if the Lucide icon library is loaded globally from the CDN
   if (window.lucide) {
     // Replace all elements with the 'data-lucide' attribute with their corresponding SVG icons
     lucide.createIcons();
   }
 
-  // ---------- Footer Auto-Updating Year ----------
+  // Footer Auto-Updating Year
   // Find the HTML element with the ID 'year' and set its text content to the current calendar year
   const yearElement = document.getElementById('year');
   if (yearElement) {
     yearElement.textContent = new Date().getFullYear();
   }
 
-  // ---------- Hero Editor Line-Number Gutter ----------
+  // Hero Editor Line-Number Gutter
   // Select the container where line numbers will be injected to mimic an IDE editor gutter
   const gutter = document.getElementById('hero-gutter');
   if (gutter) {
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ---------- Typing Effect for Bio Summary ----------
+  // Typing Effect for Bio Summary
   // Locate the HTML element where the typing bio will render
   const typedEl = document.getElementById('typed-text');
   // Check if the user has requested reduced motion in their system/browser settings (accessibility best practice)
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ---------- Scroll Reveal Animations ----------
+  // Scroll Reveal Animations
   // Select all DOM elements with the 'reveal' class to participate in scroll fade-in
   const revealEls = document.querySelectorAll('.reveal');
   
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Register each scroll-reveal element with the IntersectionObserver
   revealEls.forEach(el => revealObserver.observe(el));
 
-  // ---------- Scroll-Spy Active Tab Highlighting ----------
+  // Scroll-Spy Active Tab Highlighting
   // Select all tab links in the header navigation bar
   const tabLinks = document.querySelectorAll('.tab-link');
   // Select all main sections of the page that have an ID attribute
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Register each page section with the navigation scroll-spy observer
   sections.forEach(sec => navObserver.observe(sec));
 
-  // ---------- Contact Form Submission (Formspree Integration) ----------
+  // Contact Form Submission (Formspree Integration)
   // Find the contact form element by its ID
   const form = document.getElementById('contact-form');
   // Find the element reserved for showing form submission status messages

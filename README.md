@@ -47,4 +47,4 @@ Welcome to my developer portfolio! This project features a custom-designed, resp
 
 ---
 
-(file:///d:/shwet/code/portfolio/report.md) for full developer documentation).*
+*(Note: For the full developer architecture report and project guidelines, see [report.md](file:///d:/shwet/code/portfolio/report.md)).*

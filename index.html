@@ -11,14 +11,14 @@
   <!-- SEO Meta description explaining the page context for web crawlers -->
   <meta name="description" content="Portfolio of Shwet Kumar, Frontend Developer specializing in React, Node.js and full-stack web applications.">
 
-  <!-- ===================== GOOGLE FONTS ===================== -->
+  <!-- Google Fonts Configuration -->
   <!-- Preconnect to font domains to optimize loading speed -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Load custom typography families: Space Grotesk (display), Inter (body), JetBrains Mono (code strings) -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- ===================== TAILWIND CSS CONFIGURATION ===================== -->
+  <!-- Tailwind CSS Configuration -->
   <!-- Load the Tailwind CSS library directly from the CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -48,19 +48,17 @@
     }
   </script>
 
-  <!-- ===================== LUCIDE ICONS ===================== -->
+  <!-- Lucide Icons Loading -->
   <!-- Load the Lucide modern icon set module to render icons inside sections -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-  <!-- ===================== CUSTOM STYLE SHEET ===================== -->
+  <!-- Custom Style Sheet Link -->
   <!-- Link custom CSS file containing keyframes, cursor details, and timeline shapes -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-bg text-text font-body antialiased">
 
-  <!-- ==========================================================================
-       TAB BAR NAVIGATION (IDE STYLE)
-       ========================================================================== -->
+  <!-- Tab Bar Navigation (IDE Style) -->
   <!-- Header element fixed at the top of the viewport with a blurred background backdrop -->
   <header id="tabbar" class="fixed top-0 left-0 right-0 z-50 bg-panel/90 backdrop-blur border-b border-border">
     <!-- Grid wrapper limiting the maximum size of the header items with responsive horizontal padding -->
@@ -108,13 +106,11 @@
     </div>
   </header>
 
-  <!-- ==========================================================================
-       MAIN PORTFOLIO SECTIONS
-       ========================================================================== -->
+  <!-- Main Portfolio Content Container -->
   <!-- Margin offset top to prevent fixed header from overlapping the content -->
   <main class="pt-12">
 
-    <!-- ===================== HERO SECTION ===================== -->
+    <!-- Hero Section -->
     <!-- Section containing screen grids, typing titles, social anchors, and navigation scroll hooks -->
     <section id="home" class="min-h-[92vh] flex items-center relative overflow-hidden reveal">
       <!-- Custom grid background pattern overlay -->
@@ -175,7 +171,7 @@
       </a>
     </section>
 
-    <!-- ===================== ABOUT SECTION ===================== -->
+    <!-- About Section -->
     <section id="about" class="section reveal">
       <div class="max-w-6xl mx-auto px-6">
         <!-- Eyebrow file title -->
@@ -197,7 +193,7 @@
       </div>
     </section>
 
-    <!-- ===================== SKILLS SECTION ===================== -->
+    <!-- Skills Section -->
     <section id="skills" class="section reveal">
       <div class="max-w-6xl mx-auto px-6">
         <p class="eyebrow">skills.json</p>
@@ -264,7 +260,7 @@
       </div>
     </section>
 
-    <!-- ===================== PROJECTS SECTION ===================== -->
+    <!-- Projects Section -->
     <section id="projects" class="section reveal">
       <div class="max-w-6xl mx-auto px-6">
         <p class="eyebrow">projects.tsx</p>
@@ -340,7 +336,7 @@
       </div>
     </section>
 
-    <!-- ===================== EDUCATION SECTION ===================== -->
+    <!-- Education Section -->
     <section id="education" class="section reveal">
       <div class="max-w-6xl mx-auto px-6">
         <p class="eyebrow">education.md</p>
@@ -371,7 +367,7 @@
       </div>
     </section>
 
-    <!-- ===================== CONTACT SECTION ===================== -->
+    <!-- Contact Section -->
     <section id="contact" class="section reveal">
       <div class="max-w-6xl mx-auto px-6">
         <p class="eyebrow">contact.tsx</p>
@@ -429,9 +425,7 @@
 
   </main>
 
-  <!-- ==========================================================================
-       FOOTER SECTION
-       ========================================================================== -->
+  <!-- Footer Section -->
   <footer class="border-t border-border py-8">
     <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-muted text-sm font-mono">
       <!-- Copyright with dynamic year injected by main.js -->

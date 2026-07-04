@@ -1,9 +1,9 @@
-/* ==========================================================================
+/* 
    PORTFOLIO DESIGN SYSTEM & STYLESHEET
    Author: Shwet Kumar
    Description: Custom CSS overrides, animations, custom editor variables, and responsive layout classes 
                 that extend Tailwind CSS for a premium developer dark theme.
-   ========================================================================== */
+*/
 
 /* Define global custom CSS variables (design tokens) at the root level */
 :root {
@@ -48,9 +48,7 @@ html, body {
   scrollbar-width: none;  /* Firefox */
 }
 
-/* ==========================================================================
-   Tab Bar Navigation Styling
-   ========================================================================== */
+/* Tab Bar Navigation Styling */
 .tab-link {
   display: flex;
   align-items: center;
@@ -89,9 +87,7 @@ html, body {
   background-color: var(--accent);
 }
 
-/* ==========================================================================
-   Hero Section Effects
-   ========================================================================== */
+/* Hero Section Effects */
 /* Diagonal grid overlay simulating a blueprint or engineering layout */
 .grid-overlay {
   position: absolute;
@@ -135,9 +131,7 @@ html, body {
   50% { transform: translate(-50%, 6px); }
 }
 
-/* ==========================================================================
-   Custom Buttons
-   ========================================================================== */
+/* Custom Buttons */
 /* Primary Action Button (Solid Accent Theme) */
 .btn-primary {
   display: inline-flex;
@@ -180,9 +174,7 @@ html, body {
   transform: translateY(-2px);
 }
 
-/* ==========================================================================
-   Section Layouts
-   ========================================================================== */
+/* Section Layouts */
 /* Base section wrapper padding and separators - responsive */
 .section {
   padding: 4rem 0;
@@ -229,9 +221,7 @@ html, body {
   font-weight: 500;
 }
 
-/* ==========================================================================
-   Skills Grid Elements
-   ========================================================================== */
+/* Skills Grid Elements */
 /* Tech stack category cards */
 .skill-card {
   transition: transform 0.2s ease, border-color 0.2s ease;
@@ -254,9 +244,7 @@ html, body {
   border-radius: 0.4rem;
 }
 
-/* ==========================================================================
-   Projects Section Elements
-   ========================================================================== */
+/* Projects Section Elements */
 /* Individual project layout containers */
 .project-card {
   overflow: hidden;
@@ -289,7 +277,7 @@ html, body {
 /* Individual technology tags associated with a project */
 .tag {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--accent);
   border: 1px solid rgba(88, 166, 255, 0.35);
   background-color: rgba(88, 166, 255, 0.08);
@@ -312,9 +300,7 @@ html, body {
   color: var(--accent);
 }
 
-/* ==========================================================================
-   Education Timeline Styling
-   ========================================================================== */
+/* Education Timeline Styling */
 /* Timeline items containing years and colleges */
 .edu-item { 
   position: relative; 
@@ -332,9 +318,7 @@ html, body {
   box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.15); /* Halogen-style blue glow */
 }
 
-/* ==========================================================================
-   Contact Details & Form Styling
-   ========================================================================== */
+/* Contact Details & Form Styling */
 /* Contact link rows (email, phone, etc.) */
 .contact-row {
   display: flex;
@@ -383,9 +367,7 @@ html, body {
   color: #4b5560;
 }
 
-/* ==========================================================================
-   Scroll-Reveal CSS Transitions
-   ========================================================================== */
+/* Scroll-Reveal CSS Transitions */
 /* Default hidden status for scroll reveal elements */
 .reveal {
   opacity: 0;
@@ -399,9 +381,7 @@ html, body {
   transform: translateY(0); /* Return to default position */
 }
 
-/* ==========================================================================
-   Keyboard Accessibility Focus Highlight
-   ========================================================================== */
+/* Keyboard Accessibility Focus Highlight */
 /* Highlight interactives when navigated to using keyboard Tab key */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--accent);
