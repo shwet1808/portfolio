@@ -481,3 +481,19 @@ body {
     padding: 1.25rem !important;
   }
 }
+
+/* Mobile Dropdown Navigation Menu */
+#mobile-dropdown.active {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-nav-link {
+  border-bottom: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-link:last-child {
+  border-bottom: none;
+}

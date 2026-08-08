@@ -204,6 +204,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Mobile Dropdown Navigation Menu toggling
+  const mobileMenuTrigger = document.getElementById('mobile-menu-trigger');
+  const mobileDropdown = document.getElementById('mobile-dropdown');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+  if (mobileMenuTrigger && mobileDropdown) {
+    mobileMenuTrigger.addEventListener('click', () => {
+      mobileDropdown.classList.toggle('active');
+      // Swap menu icon between 'menu' and 'x' dynamically if lucide is active
+      const icon = mobileMenuTrigger.querySelector('i');
+      if (icon) {
+        const isClosed = mobileDropdown.classList.contains('active');
+        icon.setAttribute('data-lucide', isClosed ? 'x' : 'menu');
+        if (window.lucide) lucide.createIcons();
+      }
+    });
+  }
+
+  // Close mobile menu when links are clicked
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (mobileDropdown) {
+        mobileDropdown.classList.remove('active');
+        const icon = mobileMenuTrigger.querySelector('i');
+        if (icon) {
+          icon.setAttribute('data-lucide', 'menu');
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    });
+  });
+
   // AI Assistant Chatbot Logic
   const aiModal = document.getElementById('ai-modal');
   const aiModalContent = document.getElementById('ai-modal-content');

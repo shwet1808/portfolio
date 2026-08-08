@@ -76,6 +76,11 @@
     <!-- Grid wrapper limiting the maximum size of the header items with responsive horizontal padding -->
     <div class="max-w-6xl mx-auto flex items-center h-12 px-4 sm:px-6">
       
+      <!-- Mobile Menu Trigger Button (Visible only on mobile) -->
+      <button id="mobile-menu-trigger" class="flex sm:hidden items-center justify-center text-muted hover:text-accent p-1.5 transition-colors mr-2" aria-label="Toggle Navigation Menu">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+
       <!-- IDE Window Decorations (Close, Minimize, Maximize buttons visual mockup) - Hidden on mobile for tab space -->
       <div class="hidden sm:flex items-center gap-2 pr-4 border-r border-border h-full text-muted">
         <span class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></span> <!-- Red close dot -->
@@ -83,8 +88,8 @@
         <span class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></span> <!-- Green expand dot -->
       </div>
 
-      <!-- File Navigation Tabs (Simulates files open in an active editor) -->
-      <nav class="flex h-full overflow-x-auto no-scrollbar" id="tabnav">
+      <!-- File Navigation Tabs (Simulates files open in an active editor) - Hidden on mobile, visible on desktop -->
+      <nav class="hidden sm:flex h-full overflow-x-auto no-scrollbar" id="tabnav">
         <!-- Tab: home.tsx -->
         <a href="#home" data-tab="home" class="tab-link active-tab">
           <i data-lucide="home" class="w-3.5 h-3.5"></i>home.tsx
@@ -117,6 +122,18 @@
       </button>
     </div>
   </header>
+
+  <!-- Mobile Dropdown Navigation Menu -->
+  <div id="mobile-dropdown" class="fixed top-12 left-0 right-0 z-40 bg-panel/95 backdrop-blur-lg border-b border-border flex flex-col pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-2">
+    <nav class="flex flex-col p-4 font-mono text-sm space-y-3">
+      <a href="#home" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="home" class="w-4 h-4"></i>home.tsx</a>
+      <a href="#about" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="user" class="w-4 h-4"></i>about.tsx</a>
+      <a href="#skills" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="cpu" class="w-4 h-4"></i>skills.json</a>
+      <a href="#projects" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="folder-git-2" class="w-4 h-4"></i>projects.tsx</a>
+      <a href="#education" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="graduation-cap" class="w-4 h-4"></i>education.md</a>
+      <a href="#contact" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="mail" class="w-4 h-4"></i>contact.tsx</a>
+    </nav>
+  </div>
 
   <!-- Main Portfolio Content Container -->
   <!-- Margin offset top to prevent fixed header from overlapping the content -->
