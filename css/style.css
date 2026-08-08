@@ -463,3 +463,21 @@ body {
   66% { width: 8px; }
   99% { width: 12px; }
 }
+
+/* Mobile Optimization for Terminal Modal */
+@media (max-width: 640px) {
+  #ai-modal-content {
+    max-height: 90vh !important;
+    width: 100% !important;
+  }
+  
+  #ai-terminal-output {
+    max-height: 60vh !important;
+    padding: 1rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  #ai-key-pane {
+    padding: 1.25rem !important;
+  }
+}

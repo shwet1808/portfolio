@@ -111,8 +111,8 @@
         </a>
       </nav>
 
-      <!-- CTA Button for AI Assistant (hidden on mobile, visible on small/medium screens and up) -->
-      <button id="ask-ai-trigger" class="ml-auto mr-4 hidden sm:flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors">
+      <!-- CTA Button for AI Assistant (visible on all devices) -->
+      <button id="ask-ai-trigger" class="ml-auto mr-2 sm:mr-4 flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors">
         <i data-lucide="terminal" class="w-3.5 h-3.5"></i> ask --ai
       </button>
     </div>
@@ -480,19 +480,31 @@
       </div>
 
       <!-- API Key Setup Overlay Pane (Hidden by default, shown if no API key is set or settings is clicked) -->
-      <div id="ai-key-pane" class="hidden flex-col items-center justify-center p-8 text-center bg-panel/95 absolute inset-0 z-20 transition-all duration-200">
-        <i data-lucide="key-round" class="w-12 h-12 text-accent mb-4"></i>
-        <h3 class="font-display font-semibold text-lg mb-2">Gemini API Key Required</h3>
-        <p class="text-muted text-sm max-w-md mb-6">
-          To talk with Shwet's AI persona, please enter a Google Gemini API Key. Your key is stored securely in your browser's <code class="font-mono bg-white/5 px-1.5 py-0.5 rounded text-accent">localStorage</code> and is never sent to any third-party servers.
+      <div id="ai-key-pane" class="hidden flex-col items-center justify-start p-6 sm:p-8 text-center bg-panel/95 absolute inset-0 z-20 transition-all duration-200 overflow-y-auto">
+        <i data-lucide="settings" class="w-8 h-8 sm:w-10 sm:h-10 text-accent mb-3 sm:mb-4"></i>
+        <h3 class="font-display font-semibold text-base sm:text-lg mb-2">Assistant Settings</h3>
+        <p class="text-muted text-xs sm:text-sm max-w-md mb-4 sm:mb-6">
+          Configure your Gemini API Key and optional custom instructions on how the AI should talk. Saved locally in your browser.
         </p>
-        <div class="w-full max-w-md flex flex-col gap-3">
-          <input type="password" id="ai-key-input" class="form-input text-center" placeholder="AIzaSy...">
-          <div class="flex gap-2">
-            <button id="ai-key-save" class="btn-primary flex-1 justify-center">Save Key</button>
-            <button id="ai-key-cancel" class="btn-secondary flex-1 justify-center">Cancel</button>
+        <div class="w-full max-w-md flex flex-col gap-4 text-left">
+          <!-- API Key Section -->
+          <div>
+            <label for="ai-key-input" class="block text-xs font-mono text-muted mb-1">// Gemini API Key</label>
+            <input type="password" id="ai-key-input" class="form-input text-sm" placeholder="AIzaSy...">
+            <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-[10px] text-accent hover:underline mt-1 block">Get a free key from Google AI Studio</a>
           </div>
-          <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-xs text-accent hover:underline mt-2">Get a free Gemini API Key from Google AI Studio</a>
+
+          <!-- Prompt Instructions Section -->
+          <div>
+            <label for="ai-instruction-input" class="block text-xs font-mono text-muted mb-1">// Custom Tone / Instructions</label>
+            <textarea id="ai-instruction-input" class="form-input text-sm resize-none" rows="3" placeholder="e.g. 'Answer with technical details and keep it professional'"></textarea>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-2 mt-2">
+            <button id="ai-key-save" class="btn-primary flex-1 justify-center py-2 text-xs sm:text-sm">Save Config</button>
+            <button id="ai-key-cancel" class="btn-secondary flex-1 justify-center py-2 text-xs sm:text-sm">Cancel</button>
+          </div>
         </div>
       </div>
 

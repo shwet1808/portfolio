@@ -212,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiSettingsBtn = document.getElementById('ai-settings-btn');
   const aiKeyPane = document.getElementById('ai-key-pane');
   const aiKeyInput = document.getElementById('ai-key-input');
+  const aiInstructionInput = document.getElementById('ai-instruction-input');
   const aiKeySave = document.getElementById('ai-key-save');
   const aiKeyCancel = document.getElementById('ai-key-cancel');
   const aiTerminalOutput = document.getElementById('ai-terminal-output');
@@ -219,8 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiTerminalInput = document.getElementById('ai-terminal-input');
 
 
-  // Helper: Get stored Gemini API key
+  // Helper: Get stored Gemini API key and instructions
   const getApiKey = () => localStorage.getItem('gemini_api_key') || '';
+  const getInstructions = () => localStorage.getItem('gemini_api_instruction') || '';
 
   // Open modal
   if (askAiTrigger) {
@@ -234,6 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!getApiKey()) {
         aiKeyPane.classList.remove('hidden');
         aiKeyPane.classList.add('flex');
+        aiKeyInput.value = '';
+        aiInstructionInput.value = getInstructions();
       }
     });
   }
@@ -266,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         aiKeyPane.classList.remove('hidden');
         aiKeyPane.classList.add('flex');
         aiKeyInput.value = getApiKey();
+        aiInstructionInput.value = getInstructions();
         aiKeyInput.focus();
       } else {
         aiKeyPane.classList.add('hidden');
@@ -282,13 +287,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Save API key
+  // Save API key & custom instructions
   if (aiKeySave) {
     aiKeySave.addEventListener('click', () => {
       const keyVal = aiKeyInput.value.trim();
+      const instructionVal = aiInstructionInput.value.trim();
       if (keyVal) {
         localStorage.setItem('gemini_api_key', keyVal);
-        appendTerminalMsg('system', '✓ Gemini API key saved successfully.');
+        localStorage.setItem('gemini_api_instruction', instructionVal);
+        appendTerminalMsg('system', '✓ Assistant settings saved successfully.');
         aiKeyPane.classList.add('hidden');
         aiKeyPane.classList.remove('flex');
         aiTerminalInput.focus();
@@ -372,10 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
       aiTerminalOutput.scrollTop = aiTerminalOutput.scrollHeight;
 
       try {
-        const systemPrompt = `You are Shwet Kumar, replying directly to a recruiter or visitor on your portfolio website. 
-Answer their question concisely, professionally, and naturally in the first person ("I", "my", "me").
-Be enthusiastic, highlight my data analytics and frontend skills, and always link back to relevant projects or coursework from my education.
-If the question is completely unrelated to my profile, skills, projects, or background, politely steer the conversation back.
+        const customInstruction = getInstructions() || window.PERSONA_DATA.systemInstruction;
+        const systemPrompt = `${customInstruction}
 
 Here is my official portfolio persona data:
 ${JSON.stringify(window.PERSONA_DATA, null, 2)}
