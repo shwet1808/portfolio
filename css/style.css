@@ -401,3 +401,65 @@ body {
   margin-bottom: 0.5rem;
   text-shadow: 0 0 10px rgba(189, 0, 255, 0.2);
 }
+
+/* AI Assistant Terminal Modal Styles */
+#ai-modal {
+  transition: opacity 0.3s ease, pointer-events 0.3s ease;
+}
+
+#ai-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#ai-modal.active #ai-modal-content {
+  transform: scale(1);
+}
+
+#ai-modal-content {
+  border-color: var(--border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  background: rgba(8, 12, 24, 0.95);
+}
+
+#ai-terminal-output {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+#ai-terminal-output::-webkit-scrollbar {
+  width: 4px;
+}
+
+.terminal-user-msg {
+  color: var(--accent);
+  margin-top: 0.5rem;
+}
+
+.terminal-ai-msg {
+  color: var(--text);
+  margin-top: 0.25rem;
+  border-left: 2px solid var(--accent);
+  padding-left: 0.75rem;
+}
+
+.terminal-system-msg {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.terminal-loading-dots::after {
+  content: '...';
+  display: inline-block;
+  width: 0px;
+  overflow: hidden;
+  animation: loading-dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes loading-dots {
+  0%, 100% { width: 0px; }
+  33% { width: 4px; }
+  66% { width: 8px; }
+  99% { width: 12px; }
+}

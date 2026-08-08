@@ -111,10 +111,10 @@
         </a>
       </nav>
 
-      <!-- CTA Button for hiring (hidden on mobile, visible on small/medium screens and up) -->
-      <a href="#contact" class="ml-auto mr-4 hidden sm:flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors">
-        <i data-lucide="terminal" class="w-3.5 h-3.5"></i> run --hire-me
-      </a>
+      <!-- CTA Button for AI Assistant (hidden on mobile, visible on small/medium screens and up) -->
+      <button id="ask-ai-trigger" class="ml-auto mr-4 hidden sm:flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors">
+        <i data-lucide="terminal" class="w-3.5 h-3.5"></i> ask --ai
+      </button>
     </div>
   </header>
 
@@ -357,7 +357,16 @@
         <!-- Timeline container: Left border creates the vertical line path -->
         <div class="mt-8 relative pl-8 border-l border-border space-y-10">
 
-          <!-- Timeline Item 1: B.Sc. IT -->
+          <!-- Timeline Item 1: M.Sc. CS Data Analytics -->
+          <div class="edu-item">
+            <span class="edu-dot"></span> <!-- Circular bullet absolute positioned on the left vertical border -->
+            <p class="font-mono text-xs text-amber mb-1">2026 – 2028</p>
+            <h3 class="font-display font-semibold text-lg">M.Sc. in Computer Science (Data Analytics)</h3>
+            <p class="text-muted text-sm mb-2">A.N. College, Patna</p>
+            <p class="text-text/80 text-sm leading-relaxed mb-4">Currently pursuing post-graduation specializing in Advanced Data Analytics, Machine Learning algorithms, statistical forecasting, and Big Data technologies.</p>
+          </div>
+
+          <!-- Timeline Item 2: B.Sc. IT -->
           <div class="edu-item">
             <span class="edu-dot"></span> <!-- Circular bullet absolute positioned on the left vertical border -->
             <p class="font-mono text-xs text-amber mb-1">2023 – 2026</p>
@@ -446,6 +455,70 @@
       <p class="flex items-center gap-1.5">built with <i data-lucide="code-2" class="w-3.5 h-3.5"></i> HTML · CSS · JS</p>
     </div>
   </footer>
+
+  <!-- AI Assistant Terminal Modal -->
+  <div id="ai-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div class="w-full max-w-2xl panel shadow-2xl border border-border flex flex-col max-h-[80vh] overflow-hidden transform scale-95 transition-all duration-300" id="ai-modal-content">
+      <!-- Terminal Header -->
+      <div class="file-tab-strip flex items-center justify-between bg-panel2/90 px-4 py-3 border-b border-border">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-[#FF5F57]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#FEBC2E]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#28C840]"></span>
+          <span class="ml-2 font-mono text-xs text-muted flex items-center gap-1.5 select-none"><i data-lucide="terminal" class="w-3.5 h-3.5 text-accent"></i> ai-assistant.sh</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- API Key Config Button -->
+          <button id="ai-settings-btn" class="text-muted hover:text-accent transition-colors" title="Configure Gemini API Key">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+          </button>
+          <!-- Close Button -->
+          <button id="ai-close-btn" class="text-muted hover:text-[#FF5F57] transition-colors" title="Close Terminal">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- API Key Setup Overlay Pane (Hidden by default, shown if no API key is set or settings is clicked) -->
+      <div id="ai-key-pane" class="hidden flex-col items-center justify-center p-8 text-center bg-panel/95 absolute inset-0 z-20 transition-all duration-200">
+        <i data-lucide="key-round" class="w-12 h-12 text-accent mb-4"></i>
+        <h3 class="font-display font-semibold text-lg mb-2">Gemini API Key Required</h3>
+        <p class="text-muted text-sm max-w-md mb-6">
+          To talk with Shwet's AI persona, please enter a Google Gemini API Key. Your key is stored securely in your browser's <code class="font-mono bg-white/5 px-1.5 py-0.5 rounded text-accent">localStorage</code> and is never sent to any third-party servers.
+        </p>
+        <div class="w-full max-w-md flex flex-col gap-3">
+          <input type="password" id="ai-key-input" class="form-input text-center" placeholder="AIzaSy...">
+          <div class="flex gap-2">
+            <button id="ai-key-save" class="btn-primary flex-1 justify-center">Save Key</button>
+            <button id="ai-key-cancel" class="btn-secondary flex-1 justify-center">Cancel</button>
+          </div>
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-xs text-accent hover:underline mt-2">Get a free Gemini API Key from Google AI Studio</a>
+        </div>
+      </div>
+
+      <!-- Terminal Output Content Area -->
+      <div id="ai-terminal-output" class="flex-1 overflow-y-auto p-4 sm:p-6 font-mono text-sm space-y-4 leading-relaxed max-h-[50vh]">
+        <!-- Welcome Message -->
+        <div class="text-muted/60">// Shwet Kumar's AI Persona Assistant v1.0.0</div>
+        <div class="text-muted/60">// Type a question below to learn about my skills, projects, or background.</div>
+        <div class="flex items-start gap-2">
+          <span class="text-[#28C840] select-none">ai-assistant:~$</span>
+          <span class="text-text">Hello! I am Shwet's AI assistant. Ask me anything about Shwet's projects, technical skills, or education.</span>
+        </div>
+      </div>
+
+      <!-- Terminal Input Line Area -->
+      <div class="p-3 bg-panel/85 border-t border-border flex items-center gap-2">
+        <span class="font-mono text-sm text-[#28C840] select-none pl-2">guest:~$</span>
+        <form id="ai-terminal-form" class="flex-1 flex items-center gap-2">
+          <input type="text" id="ai-terminal-input" autocomplete="off" class="flex-1 bg-transparent border-none outline-none font-mono text-sm text-text focus:ring-0 placeholder:text-muted/40" placeholder="Ask a question (e.g., 'What are Shwet's skills?')">
+          <button type="submit" class="text-accent hover:text-white p-1 transition-colors animate-pulse" title="Send question">
+            <i data-lucide="corner-down-left" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Link Main JS interaction logic script -->
   <script src="js/main.js"></script>
