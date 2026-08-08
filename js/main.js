@@ -192,4 +192,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Mouse movement tracker for dynamic glass spotlights on cards
+  const panels = document.querySelectorAll('.panel');
+  panels.forEach(panel => {
+    panel.addEventListener('mousemove', (e) => {
+      const rect = panel.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      panel.style.setProperty('--mouse-x', `${x}px`);
+      panel.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+
 });
