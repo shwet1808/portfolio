@@ -16,7 +16,10 @@ portfolio/
 ├── css/
 │   └── style.css            # Custom CSS style declarations (tokens, animations, media queries)
 ├── js/
-│   └── main.js              # Interactivity logic (typing, reveal on scroll, navigation hooks)
+│   ├── main.js              # Interactivity logic (typing, reveal on scroll, navigation hooks)
+│   ├── aiModal.js           # AI assistant terminal modal (UI and API key handling)
+│   ├── api.js               # Gemini API request helper
+│   └── persona.js           # Persona dataset consumed by the AI assistant
 ├── index.html               # Semantic HTML structure & CDN framework configuration
 └── README.md                # Public presentation of your portfolio
 ```
@@ -28,11 +31,11 @@ portfolio/
 ### 1. Color Palette (IDE Dark Theme)
 The color theme is configured in both `index.html` (via Tailwind's CDN configuration script) and `css/style.css` (via standard CSS Variables).
 
-* **Background (`--bg`)**: `#0F1419` — Deep, elegant dark-slate shade.
-* **Panels (`--panel`)**: `#161B22` & `#1C232C` — Standard dark surfaces mimicking the background of VS Code cards or terminals.
-* **Borders (`--border`)**: `#26303B` — Sleek grid lines for code tabs.
-* **Accent (`--accent`)**: `#58A6FF` — GitHub-style blue color representing active files, focus indicators, and buttons.
-* **Amber (`--amber`)**: `#E3B341` — Warning/alert color for file titles and highlight text.
+* **Background (`--bg`)**: `#03050a` — Deep void background.
+* **Panels (`--panel`)**: `rgba(10, 16, 32, 0.5)` — Glassmorphic dark surfaces mimicking the background of VS Code cards or terminals.
+* **Borders (`--border`)**: `rgba(255, 255, 255, 0.06)` — Ultra-fine grid lines for code tabs.
+* **Accent (`--accent`)**: `#00f2fe` — Neon cyan representing active files, focus indicators, and buttons.
+* **Purple (`--purple`)**: `#bd00ff` — Neon purple for file titles and highlight text (applied through the Tailwind `amber` alias).
 
 ### 2. Fonts
 * **Space Grotesk** (display font) — Used for modern, bold titles.

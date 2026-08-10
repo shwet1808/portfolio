@@ -9,4 +9,4 @@ A sleek, premium, developer-themed portfolio website designed to look and feel l
 * **Modern Interactivity**: Features typewriter animations, scroll reveal animations, and a scroll-spy active navigation bar built using native JavaScript.
 * **Contact Form**: Integrated with Formspree for direct email notifications.
 
-*(Note: For the full developer architecture report and project guidelines, see [report.md](file:///d:/shwet/code/portfolio/report.md)).*
+*(Note: For the full developer architecture report and project guidelines, see [report.md](report.md)).*

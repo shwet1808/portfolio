@@ -31,16 +31,14 @@
         extend: {
           // Define custom hex color values matching the editor code theme
           colors: {
-            bg: '#05070f',      // Modern deep cyber-dark background
-            panel: 'rgba(10, 15, 30, 0.7)',   // Semi-transparent panel
-            panel2: 'rgba(18, 25, 45, 0.8)',  // Secondary header/panel
-            border: 'rgba(255, 255, 255, 0.08)',  // Ultra-subtle border
-            text: '#E6EDF3',    // Primary text
-            muted: '#8B949E',   // Muted gray labels
-            accent: '#00f2fe',  // Cyber cyan accent
-            amber: '#bd00ff',   // Cyber purple accent
-            neonPink: '#ff007a',
-            neonGreen: '#10b981',
+            bg: 'var(--bg)',
+            panel: 'var(--panel)',
+            panel2: 'var(--panel-solid)',
+            border: 'var(--border)',
+            text: 'var(--text)',
+            muted: 'var(--muted)',
+            accent: 'var(--accent)',
+            amber: 'var(--purple)'
           },
           // Map fonts loaded from Google Fonts to Tailwind classes (e.g., font-display, font-mono)
           fontFamily: {
@@ -104,7 +102,7 @@
         </a>
         <!-- Tab: projects.tsx -->
         <a href="#projects" data-tab="projects" class="tab-link">
-          <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>projects.tsx
+          <i data-lucide="folder-git" class="w-3.5 h-3.5"></i>projects.tsx
         </a>
         <!-- Tab: education.md -->
         <a href="#education" data-tab="education" class="tab-link">
@@ -116,8 +114,13 @@
         </a>
       </nav>
 
+      <!-- Theme Toggle Button -->
+      <button id="theme-toggle" class="ml-auto mr-2 flex items-center justify-center p-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors" aria-label="Toggle Dark/Light Mode">
+        <i data-lucide="sun" class="w-4 h-4"></i>
+      </button>
+
       <!-- CTA Button for AI Assistant (visible on all devices) -->
-      <button id="ask-ai-trigger" class="ml-auto mr-2 sm:mr-4 flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors">
+      <button id="ask-ai-trigger" class="mr-2 sm:mr-4 flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border text-muted hover:text-accent hover:border-accent transition-colors">
         <i data-lucide="terminal" class="w-3.5 h-3.5"></i> ask --ai
       </button>
     </div>
@@ -129,7 +132,7 @@
       <a href="#home" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="home" class="w-4 h-4"></i>home.tsx</a>
       <a href="#about" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="user" class="w-4 h-4"></i>about.tsx</a>
       <a href="#skills" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="cpu" class="w-4 h-4"></i>skills.json</a>
-      <a href="#projects" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="folder-git-2" class="w-4 h-4"></i>projects.tsx</a>
+      <a href="#projects" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="folder-git" class="w-4 h-4"></i>projects.tsx</a>
       <a href="#education" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="graduation-cap" class="w-4 h-4"></i>education.md</a>
       <a href="#contact" class="mobile-nav-link flex items-center gap-2 text-muted hover:text-accent py-1.5"><i data-lucide="mail" class="w-4 h-4"></i>contact.tsx</a>
     </nav>
@@ -169,7 +172,7 @@
           <!-- Call-to-action buttons -->
           <div class="mt-8 flex flex-wrap gap-3">
             <a href="#projects" class="btn-primary">
-              <i data-lucide="folder-git-2" class="w-4 h-4"></i> View projects
+              <i data-lucide="folder-git" class="w-4 h-4"></i> View projects
             </a>
             <a href="#contact" class="btn-secondary">
               <i data-lucide="send" class="w-4 h-4"></i> Get in touch
@@ -228,7 +231,7 @@
         <p class="eyebrow">skills.json</p>
         <h2 class="section-title">What I work with</h2>
 
-        <!-- Grid grid layout: 1 column on mobile, 2 columns on small screens and up -->
+        <!-- Grid layout: 1 column on mobile, 2 columns on small screens and up -->
         <div class="mt-8 grid sm:grid-cols-2 gap-5">
 
           <!-- Category card: Frontend -->
@@ -392,7 +395,7 @@
             <p class="text-text/80 text-sm leading-relaxed">Graduated in 2026. Relevant coursework: Data Structures, Web Technologies, Database Management Systems, Operating Systems, Computer Architecture & Organization, and Digital Electronics.</p>
           </div>
 
-          <!-- Timeline Item 2: Class 12 -->
+          <!-- Timeline Item 3: Class 12 -->
           <div class="edu-item">
             <span class="edu-dot"></span> <!-- Circle dot element -->
             <p class="font-mono text-xs text-amber mb-1">2021 – 2023</p>
@@ -469,13 +472,13 @@
       <!-- Copyright with dynamic year injected by main.js -->
       <p>© <span id="year"></span> Shwet Kumar</p>
       <!-- Technology footnote -->
-      <p class="flex items-center gap-1.5">built with <i data-lucide="code-2" class="w-3.5 h-3.5"></i> HTML · CSS · JS</p>
+      <p class="flex items-center gap-1.5">built with <i data-lucide="code-xml" class="w-3.5 h-3.5"></i> HTML · CSS · JS</p>
     </div>
   </footer>
 
   <!-- AI Assistant Terminal Modal -->
-  <div id="ai-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-    <div class="w-full max-w-2xl panel shadow-2xl border border-border flex flex-col max-h-[80vh] overflow-hidden transform scale-95 transition-all duration-300" id="ai-modal-content">
+  <div id="ai-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg/85 backdrop-blur-md opacity-0 pointer-events-none">
+    <div class="w-full max-w-2xl panel shadow-2xl border border-border flex flex-col max-h-[80vh] overflow-hidden transform scale-95 transition-all duration-300 relative" id="ai-modal-content">
       <!-- Terminal Header -->
       <div class="file-tab-strip flex items-center justify-between bg-panel2/90 px-4 py-3 border-b border-border">
         <div class="flex items-center gap-2">
@@ -497,29 +500,23 @@
       </div>
 
       <!-- API Key Setup Overlay Pane (Hidden by default, shown if no API key is set or settings is clicked) -->
-      <div id="ai-key-pane" class="hidden flex-col items-center justify-start p-6 sm:p-8 text-center bg-panel/95 absolute inset-0 z-20 transition-all duration-200 overflow-y-auto">
-        <i data-lucide="settings" class="w-8 h-8 sm:w-10 sm:h-10 text-accent mb-3 sm:mb-4"></i>
-        <h3 class="font-display font-semibold text-base sm:text-lg mb-2">Assistant Settings</h3>
+      <div id="ai-key-pane" class="hidden flex-col items-center justify-center p-6 sm:p-8 text-center bg-panel/95 absolute inset-0 z-20 transition-all duration-200">
+        <i data-lucide="key" class="w-8 h-8 sm:w-10 sm:h-10 text-accent mb-3 sm:mb-4"></i>
+        <h3 class="font-display font-semibold text-base sm:text-lg mb-2">Gemini API Key Required</h3>
         <p class="text-muted text-xs sm:text-sm max-w-md mb-4 sm:mb-6">
-          Configure your Gemini API Key and optional custom instructions on how the AI should talk. Saved locally in your browser.
+          To talk with Shwet's AI persona, please enter a Google Gemini API Key. Your key is stored securely in your browser's <code class="font-mono bg-white/5 px-1.5 py-0.5 rounded text-accent">localStorage</code>.
         </p>
         <div class="w-full max-w-md flex flex-col gap-4 text-left">
           <!-- API Key Section -->
           <div>
             <label for="ai-key-input" class="block text-xs font-mono text-muted mb-1">// Gemini API Key</label>
-            <input type="password" id="ai-key-input" class="form-input text-sm" placeholder="AIzaSy...">
-            <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-[10px] text-accent hover:underline mt-1 block">Get a free key from Google AI Studio</a>
-          </div>
-
-          <!-- Prompt Instructions Section -->
-          <div>
-            <label for="ai-instruction-input" class="block text-xs font-mono text-muted mb-1">// Custom Tone / Instructions</label>
-            <textarea id="ai-instruction-input" class="form-input text-sm resize-none" rows="3" placeholder="e.g. 'Answer with technical details and keep it professional'"></textarea>
+            <input type="password" id="ai-key-input" class="form-input text-sm text-center" placeholder="AIzaSy...">
+            <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-[10px] text-accent hover:underline mt-1 block text-center">Get a free key from Google AI Studio</a>
           </div>
 
           <!-- Actions -->
           <div class="flex gap-2 mt-2">
-            <button id="ai-key-save" class="btn-primary flex-1 justify-center py-2 text-xs sm:text-sm">Save Config</button>
+            <button id="ai-key-save" class="btn-primary flex-1 justify-center py-2 text-xs sm:text-sm">Save Key</button>
             <button id="ai-key-cancel" class="btn-secondary flex-1 justify-center py-2 text-xs sm:text-sm">Cancel</button>
           </div>
         </div>
@@ -551,6 +548,9 @@
 
   <!-- Link Persona dataset script -->
   <script src="js/persona.js"></script>
+  <!-- Link AI Assistant helpers -->
+  <script src="js/api.js"></script>
+  <script src="js/aiModal.js"></script>
   <!-- Link Main JS interaction logic script -->
   <script src="js/main.js"></script>
 </body>

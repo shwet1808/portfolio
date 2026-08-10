@@ -6,7 +6,6 @@
  *              scroll-spy tab navigation highlighting, and async contact form submission.
  */
 
-// Wait until the HTML document has been fully loaded and parsed before running any scripts
 document.addEventListener('DOMContentLoaded', () => {
 
   // Icons Initialization
@@ -56,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Otherwise, start the typing animation
       let i = 0; // Pointer tracking the current character index to type
       const speed = 22; // Speed interval in milliseconds between typing each character
-      
+
       // Recursive typing function
       function type() {
         // Continue typing if the pointer hasn't reached the end of the text
@@ -77,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Scroll Reveal Animations
   // Select all DOM elements with the 'reveal' class to participate in scroll fade-in
   const revealEls = document.querySelectorAll('.reveal');
-  
+
   // Set up an IntersectionObserver to detect when elements enter the browser viewport
   const revealObserver = new IntersectionObserver((entries) => {
     // Loop through each observed entry
@@ -90,11 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.unobserve(entry.target);
       }
     });
-  }, { 
+  }, {
     // Trigger the entry callback when at least 12% of the element is visible in the viewport
-    threshold: 0.12 
+    threshold: 0.12
   });
-  
+
   // Register each scroll-reveal element with the IntersectionObserver
   revealEls.forEach(el => revealObserver.observe(el));
 
@@ -111,10 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const id = entry.target.getAttribute('id');
       // Find the corresponding navigation link that matches this section's ID
       const link = document.querySelector(`.tab-link[data-tab="${id}"]`);
-      
+
       // If no matching navigation link is found, exit early
       if (!link) return;
-      
+
       // If the section occupies the center threshold area of the screen
       if (entry.isIntersecting) {
         // Remove the active status styling class from all tab links
@@ -123,10 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
         link.classList.add('active-tab');
       }
     });
-  }, { 
+  }, {
     // rootMargin defines bounds to match when sections cross the middle 10% vertical band of the screen
-    rootMargin: '-45% 0px -45% 0px', 
-    threshold: 0 
+    rootMargin: '-45% 0px -45% 0px',
+    threshold: 0
   });
 
   // Register each page section with the navigation scroll-spy observer
@@ -143,12 +142,24 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
       // Prevent the default browser form submission (which reloads the page)
       e.preventDefault();
-      
+
+      // Check if the Formspree endpoint is still a placeholder
+      if (form.action.includes('YOUR_FORM_ID')) {
+        if (status) {
+          status.classList.remove('hidden');
+          status.textContent = '✗ Contact form is not configured yet. Please email me directly at shwetkumar29@gmail.com.';
+          status.style.color = '#F85149';
+        }
+        return;
+      }
+
       // Find the submit button inside the form
       const submitBtn = form.querySelector('button[type="submit"]');
+      if (!submitBtn) return;
+
       // Save the original label of the submit button to restore it later
       const originalLabel = submitBtn.innerHTML;
-      
+
       // Disable the button to prevent double submissions and update the label
       submitBtn.disabled = true;
       submitBtn.innerHTML = 'Sending…';
@@ -162,25 +173,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Make the status text container visible by removing the 'hidden' class
-        status.classList.remove('hidden');
-        
+        if (status) status.classList.remove('hidden');
+
         // Check if the server accepted the submission successfully
         if (response.ok) {
           // Display success message and style it green
-          status.textContent = '✓ Message sent — thanks! I\'ll get back to you soon.';
-          status.style.color = '#3FB950'; // GitHub/GitLab-style success green color
+          if (status) {
+            status.textContent = '✓ Message sent — thanks! I\'ll get back to you soon.';
+            status.style.color = '#3FB950'; // GitHub/GitLab-style success green color
+          }
           // Reset all form input fields to their default empty states
           form.reset();
         } else {
           // If response status was not OK, display error message and style it red
-          status.textContent = '✗ Something went wrong. Please email me directly instead.';
-          status.style.color = '#F85149'; // Error red color
+          if (status) {
+            status.textContent = '✗ Something went wrong. Please email me directly instead.';
+            status.style.color = '#F85149'; // Error red color
+          }
         }
       } catch (err) {
         // Handle any network-level errors (e.g. offline, connection timeout)
-        status.classList.remove('hidden');
-        status.textContent = '✗ Network error. Please email me directly instead.';
-        status.style.color = '#F85149';
+        if (status) {
+          status.classList.remove('hidden');
+          status.textContent = '✗ Network error. Please email me directly instead.';
+          status.style.color = '#F85149';
+        }
       } finally {
         // Re-enable the submit button so the user can try again if they want
         submitBtn.disabled = false;
@@ -213,10 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenuTrigger.addEventListener('click', () => {
       mobileDropdown.classList.toggle('active');
       // Swap menu icon between 'menu' and 'x' dynamically if lucide is active
-      const icon = mobileMenuTrigger.querySelector('i');
+      // Note: select '[data-lucide]' instead of 'i' because lucide.createIcons() replaces <i> tags with <svg>
+      const icon = mobileMenuTrigger.querySelector('[data-lucide]');
       if (icon) {
-        const isClosed = mobileDropdown.classList.contains('active');
-        icon.setAttribute('data-lucide', isClosed ? 'x' : 'menu');
+        const isOpen = mobileDropdown.classList.contains('active');
+        icon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
         if (window.lucide) lucide.createIcons();
       }
     });
@@ -227,224 +245,51 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', () => {
       if (mobileDropdown) {
         mobileDropdown.classList.remove('active');
-        const icon = mobileMenuTrigger.querySelector('i');
-        if (icon) {
-          icon.setAttribute('data-lucide', 'menu');
-          if (window.lucide) lucide.createIcons();
+        if (mobileMenuTrigger) {
+          const icon = mobileMenuTrigger.querySelector('[data-lucide]');
+          if (icon) {
+            icon.setAttribute('data-lucide', 'menu');
+            if (window.lucide) lucide.createIcons();
+          }
         }
       }
     });
   });
 
-  // AI Assistant Chatbot Logic
-  const aiModal = document.getElementById('ai-modal');
-  const aiModalContent = document.getElementById('ai-modal-content');
-  const askAiTrigger = document.getElementById('ask-ai-trigger');
-  const aiCloseBtn = document.getElementById('ai-close-btn');
-  const aiSettingsBtn = document.getElementById('ai-settings-btn');
-  const aiKeyPane = document.getElementById('ai-key-pane');
-  const aiKeyInput = document.getElementById('ai-key-input');
-  const aiInstructionInput = document.getElementById('ai-instruction-input');
-  const aiKeySave = document.getElementById('ai-key-save');
-  const aiKeyCancel = document.getElementById('ai-key-cancel');
-  const aiTerminalOutput = document.getElementById('ai-terminal-output');
-  const aiTerminalForm = document.getElementById('ai-terminal-form');
-  const aiTerminalInput = document.getElementById('ai-terminal-input');
+  // Theme Toggle Logic
+  const themeToggle = document.getElementById('theme-toggle');
 
+  // Set theme based on localStorage preference
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  if (currentTheme === 'light') {
+    document.body.classList.add('light-theme');
+    updateThemeToggleIcon(true);
+  } else {
+    updateThemeToggleIcon(false);
+  }
 
-  // Helper: Get stored Gemini API key and instructions
-  const getApiKey = () => localStorage.getItem('gemini_api_key') || '';
-  const getInstructions = () => localStorage.getItem('gemini_api_instruction') || '';
-
-  // Open modal
-  if (askAiTrigger) {
-    askAiTrigger.addEventListener('click', () => {
-      aiModal.classList.add('active');
-      setTimeout(() => {
-        aiTerminalInput.focus();
-      }, 100);
-      
-      // If key is not configured, show key configuration pane first
-      if (!getApiKey()) {
-        aiKeyPane.classList.remove('hidden');
-        aiKeyPane.classList.add('flex');
-        aiKeyInput.value = '';
-        aiInstructionInput.value = getInstructions();
-      }
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeToggleIcon(isLight);
     });
   }
 
-  // Close modal
-  const closeModal = () => {
-    aiModal.classList.remove('active');
-    aiKeyPane.classList.add('hidden');
-    aiKeyPane.classList.remove('flex');
-  };
-
-  if (aiCloseBtn) {
-    aiCloseBtn.addEventListener('click', closeModal);
-  }
-
-  // Close modal on click outside of panel
-  if (aiModal) {
-    aiModal.addEventListener('click', (e) => {
-      if (e.target === aiModal) {
-        closeModal();
-      }
-    });
-  }
-
-  // Toggle API Key settings pane
-  if (aiSettingsBtn) {
-    aiSettingsBtn.addEventListener('click', () => {
-      const isHidden = aiKeyPane.classList.contains('hidden');
-      if (isHidden) {
-        aiKeyPane.classList.remove('hidden');
-        aiKeyPane.classList.add('flex');
-        aiKeyInput.value = getApiKey();
-        aiInstructionInput.value = getInstructions();
-        aiKeyInput.focus();
-      } else {
-        aiKeyPane.classList.add('hidden');
-        aiKeyPane.classList.remove('flex');
-      }
-    });
-  }
-
-  // Cancel API key configuration
-  if (aiKeyCancel) {
-    aiKeyCancel.addEventListener('click', () => {
-      aiKeyPane.classList.add('hidden');
-      aiKeyPane.classList.remove('flex');
-    });
-  }
-
-  // Save API key & custom instructions
-  if (aiKeySave) {
-    aiKeySave.addEventListener('click', () => {
-      const keyVal = aiKeyInput.value.trim();
-      const instructionVal = aiInstructionInput.value.trim();
-      if (keyVal) {
-        localStorage.setItem('gemini_api_key', keyVal);
-        localStorage.setItem('gemini_api_instruction', instructionVal);
-        appendTerminalMsg('system', '✓ Assistant settings saved successfully.');
-        aiKeyPane.classList.add('hidden');
-        aiKeyPane.classList.remove('flex');
-        aiTerminalInput.focus();
-      } else {
-        alert('Please enter a valid API Key.');
-      }
-    });
-  }
-
-  // Helper: Append messages to the terminal
-  function appendTerminalMsg(sender, text) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'flex items-start gap-2';
-    
-    if (sender === 'user') {
-      msgDiv.innerHTML = `
-        <span class="text-[#28C840] select-none">guest:~$</span>
-        <span class="text-accent">${escapeHTML(text)}</span>
-      `;
-    } else if (sender === 'ai') {
-      msgDiv.innerHTML = `
-        <span class="text-[#28C840] select-none">ai-assistant:~$</span>
-        <span class="text-text terminal-ai-msg">${formatAIResponse(text)}</span>
-      `;
-    } else {
-      msgDiv.innerHTML = `
-        <span class="text-muted select-none">//</span>
-        <span class="terminal-system-msg">${escapeHTML(text)}</span>
-      `;
+  function updateThemeToggleIcon(isLight) {
+    if (!themeToggle) return;
+    // Select '[data-lucide]' instead of 'i' because lucide.createIcons() replaces <i> tags with <svg>
+    const icon = themeToggle.querySelector('[data-lucide]');
+    if (icon) {
+      icon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+      if (window.lucide) lucide.createIcons();
     }
-    
-    aiTerminalOutput.appendChild(msgDiv);
-    aiTerminalOutput.scrollTop = aiTerminalOutput.scrollHeight;
   }
 
-  // Helper: Escape HTML to prevent injection
-  function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, 
-      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-    );
-  }
-
-  // Helper: Format AI markdown/code blocks neatly
-  function formatAIResponse(text) {
-    // Simple markdown link conversion
-    let formatted = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-accent underline">$1</a>');
-    // Code blocks styling
-    formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-white/5 px-1 py-0.5 rounded text-accent font-mono text-xs">$1</code>');
-    // Bullet lines styling
-    formatted = formatted.replace(/^\s*[-*]\s+(.*)$/gm, '• $1');
-    // Line breaks
-    return formatted.replace(/\n/g, '<br>');
-  }
-
-  // Handle Question Submission
-  if (aiTerminalForm) {
-    aiTerminalForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const question = aiTerminalInput.value.trim();
-      if (!question) return;
-
-      // Append user prompt to logs
-      appendTerminalMsg('user', question);
-      aiTerminalInput.value = '';
-
-      // Validate API Key
-      const key = getApiKey();
-      if (!key) {
-        appendTerminalMsg('system', 'Error: No Gemini API Key configured. Please click the settings icon at the top right to configure your API key.');
-        return;
-      }
-
-      // Create loading indicator
-      const loaderDiv = document.createElement('div');
-      loaderDiv.className = 'flex items-start gap-2 text-muted';
-      loaderDiv.innerHTML = `
-        <span class="text-[#28C840] select-none">ai-assistant:~$</span>
-        <span class="terminal-loading-dots">Analyzing query</span>
-      `;
-      aiTerminalOutput.appendChild(loaderDiv);
-      aiTerminalOutput.scrollTop = aiTerminalOutput.scrollHeight;
-
-      try {
-        const customInstruction = getInstructions() || window.PERSONA_DATA.systemInstruction;
-        const systemPrompt = `${customInstruction}
-
-Here is my official portfolio persona data:
-${JSON.stringify(window.PERSONA_DATA, null, 2)}
-
-Recruiter's question: ${question}`;
-
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${key}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: systemPrompt }] }]
-          })
-        });
-
-        // Remove loading indicator
-        loaderDiv.remove();
-
-        if (response.ok) {
-          const data = await response.json();
-          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "I couldn't generate a response. Please try asking in a different way!";
-          appendTerminalMsg('ai', reply);
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          const errMsg = errData.error?.message || response.statusText;
-          appendTerminalMsg('system', `API Error: ${errMsg}. Please verify your API Key in Settings.`);
-        }
-      } catch (err) {
-        loaderDiv.remove();
-        appendTerminalMsg('system', 'Network connection error. Please try again.');
-      }
-    });
+  // Initialize the AI Assistant modal
+  if (typeof window.initAIAssistant === 'function') {
+    window.initAIAssistant();
   }
 
 });
-
