@@ -3,7 +3,7 @@ async function callGemini(prompt) {
   if (!key) throw new Error('No Gemini API key configured.');
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const timeout = setTimeout(() => controller.abort(), 20000);
 
   try {
     const res = await fetch(
@@ -14,7 +14,7 @@ async function callGemini(prompt) {
         signal: controller.signal,
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
+          generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
         })
       }
     );
@@ -29,7 +29,7 @@ async function callGemini(prompt) {
     return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
   } catch (err) {
     clearTimeout(timeout);
-    if (err.name === 'AbortError') throw new Error('Request timed out. Try again.');
+    if (err.name === 'AbortError') throw new Error('Request timed out. Please try again.');
     throw err;
   }
 }

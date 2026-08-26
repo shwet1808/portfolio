@@ -1,6 +1,3 @@
-/**
- * AI Chat — Modern chat interface using Gemini API
- */
 function initAIChat() {
   const panel = document.getElementById('ai-chat-panel');
   const toggle = document.getElementById('ai-chat-toggle');
@@ -19,21 +16,18 @@ function initAIChat() {
 
   const getKey = () => localStorage.getItem('gemini_api_key') || '';
 
-  // Toggle panel
   toggle.addEventListener('click', () => {
-    const isOpen = panel.classList.contains('open');
-    if (isOpen) {
+    if (panel.classList.contains('open')) {
       panel.classList.remove('open');
     } else {
       panel.classList.add('open');
       if (!getKey() && keyPane) showKeyPane();
-      else setTimeout(() => chatInput.focus(), 100);
+      else setTimeout(() => chatInput.focus(), 150);
     }
   });
 
   closeBtn?.addEventListener('click', () => panel.classList.remove('open'));
 
-  // Key pane
   function showKeyPane() {
     if (!keyPane) return;
     keyPane.classList.remove('hidden');
@@ -64,20 +58,17 @@ function initAIChat() {
     }
   });
 
-  // Suggestions
   suggestions?.addEventListener('click', e => {
     const btn = e.target.closest('.chat-suggestion');
     if (btn) sendMessage(btn.dataset.q);
   });
 
-  // Form submit
   chatForm.addEventListener('submit', e => {
     e.preventDefault();
     const q = chatInput.value.trim();
     if (q) sendMessage(q);
   });
 
-  // Handle Enter key (not Shift+Enter)
   chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -99,7 +90,7 @@ function initAIChat() {
     const typing = addTyping();
 
     try {
-      const prompt = `${window.PERSONA_DATA.systemInstruction}\n\nMy portfolio data:\n${JSON.stringify(window.PERSONA_DATA)}\n\nQuestion: ${text}`;
+      const prompt = buildPrompt(text);
       const reply = await callGemini(prompt);
       typing.remove();
       addMessage('ai', reply);
@@ -107,6 +98,43 @@ function initAIChat() {
       typing.remove();
       addMessage('system', err.message || 'Failed to get response.');
     }
+  }
+
+  function buildPrompt(question) {
+    const d = window.PERSONA_DATA;
+    const skillsText = Object.entries(d.skills)
+      .map(([cat, list]) => `${cat}: ${list.join(', ')}`)
+      .join('\n');
+
+    const projectsText = d.projects
+      .map(p => `${p.name} (${p.tech}) — ${p.summary}`)
+      .join('\n');
+
+    const eduText = d.education
+      .map(e => `${e.degree} from ${e.institution} (${e.period})`)
+      .join('\n');
+
+    const context = [
+      `Name: ${d.name}`,
+      `Role: ${d.role}`,
+      `Location: ${d.location}`,
+      `Email: ${d.email}`,
+      `Phone: ${d.phone}`,
+      `GitHub: ${d.github}`,
+      `LinkedIn: ${d.linkedin}`,
+      `Bio: ${d.bio}`,
+      '',
+      'Education:',
+      eduText,
+      '',
+      'Skills:',
+      skillsText,
+      '',
+      'Projects:',
+      projectsText
+    ].join('\n');
+
+    return `${d.systemInstruction}\n\nPortfolio Data:\n${context}\n\nVisitor's question: ${question}`;
   }
 
   function addMessage(type, text) {
