@@ -1,190 +1,159 @@
-// aiModal.js - AI Assistant implementation
-// This module sets up the AI assistant terminal UI, handles the API key UI,
-// and processes user questions using the Gemini API via the helper in api.js.
-
 /**
- * Initialise all event listeners for the AI assistant modal.
- * Call this function after the DOMContentLoaded event (handled in main.js).
+ * AI Chat — Modern chat interface using Gemini API
  */
-function initAIAssistant() {
-  // Grab UI elements
-  const aiModal = document.getElementById('ai-modal');
-  const askAiTrigger = document.getElementById('ask-ai-trigger');
-  const aiCloseBtn = document.getElementById('ai-close-btn');
-  const aiSettingsBtn = document.getElementById('ai-settings-btn');
-  const aiKeyPane = document.getElementById('ai-key-pane');
-  const aiKeyInput = document.getElementById('ai-key-input');
-  const aiKeySave = document.getElementById('ai-key-save');
-  const aiKeyCancel = document.getElementById('ai-key-cancel');
-  const aiTerminalOutput = document.getElementById('ai-terminal-output');
-  const aiTerminalForm = document.getElementById('ai-terminal-form');
-  const aiTerminalInput = document.getElementById('ai-terminal-input');
+function initAIChat() {
+  const panel = document.getElementById('ai-chat-panel');
+  const toggle = document.getElementById('ai-chat-toggle');
+  const closeBtn = document.getElementById('ai-close-btn');
+  const settingsBtn = document.getElementById('ai-settings-btn');
+  const keyPane = document.getElementById('ai-key-pane');
+  const keyInput = document.getElementById('ai-key-input');
+  const keySave = document.getElementById('ai-key-save');
+  const keyCancel = document.getElementById('ai-key-cancel');
+  const messages = document.getElementById('ai-chat-messages');
+  const suggestions = document.getElementById('ai-suggestions');
+  const chatForm = document.getElementById('ai-chat-form');
+  const chatInput = document.getElementById('ai-chat-input');
 
-  if (!aiModal || !askAiTrigger || !aiTerminalOutput || !aiTerminalForm || !aiTerminalInput) {
-    return;
-  }
+  if (!panel || !toggle || !messages || !chatForm || !chatInput) return;
 
-  const getApiKey = () => localStorage.getItem('gemini_api_key') || '';
+  const getKey = () => localStorage.getItem('gemini_api_key') || '';
 
-  // Open modal
-  askAiTrigger.addEventListener('click', () => {
-    aiModal.classList.add('active');
-    if (!getApiKey() && aiKeyPane && aiKeyInput) {
-      // No API key saved yet: show the setup pane and focus its input instead of the terminal behind it
-      aiKeyPane.classList.remove('hidden');
-      aiKeyPane.classList.add('flex');
-      aiKeyInput.value = '';
-      setTimeout(() => aiKeyInput.focus(), 100);
+  // Toggle panel
+  toggle.addEventListener('click', () => {
+    const isOpen = panel.classList.contains('open');
+    if (isOpen) {
+      panel.classList.remove('open');
     } else {
-      setTimeout(() => aiTerminalInput.focus(), 100);
+      panel.classList.add('open');
+      if (!getKey() && keyPane) showKeyPane();
+      else setTimeout(() => chatInput.focus(), 100);
     }
   });
 
-  const closeModal = () => {
-    aiModal.classList.remove('active');
-    if (aiKeyPane) {
-      aiKeyPane.classList.add('hidden');
-      aiKeyPane.classList.remove('flex');
+  closeBtn?.addEventListener('click', () => panel.classList.remove('open'));
+
+  // Key pane
+  function showKeyPane() {
+    if (!keyPane) return;
+    keyPane.classList.remove('hidden');
+    keyPane.classList.add('flex');
+    if (keyInput) { keyInput.value = getKey(); keyInput.focus(); }
+  }
+
+  function hideKeyPane() {
+    if (!keyPane) return;
+    keyPane.classList.add('hidden');
+    keyPane.classList.remove('flex');
+  }
+
+  settingsBtn?.addEventListener('click', () => {
+    if (keyPane?.classList.contains('hidden')) showKeyPane();
+    else hideKeyPane();
+  });
+
+  keyCancel?.addEventListener('click', hideKeyPane);
+
+  keySave?.addEventListener('click', () => {
+    const val = keyInput?.value.trim();
+    if (val) {
+      localStorage.setItem('gemini_api_key', val);
+      addMessage('system', 'API key saved.');
+      hideKeyPane();
+      chatInput.focus();
     }
-  };
+  });
 
-  if (aiCloseBtn) aiCloseBtn.addEventListener('click', closeModal);
+  // Suggestions
+  suggestions?.addEventListener('click', e => {
+    const btn = e.target.closest('.chat-suggestion');
+    if (btn) sendMessage(btn.dataset.q);
+  });
 
-  // Click outside to close
-  if (aiModal) {
-    aiModal.addEventListener('click', e => {
-      if (e.target === aiModal) closeModal();
-    });
-  }
-
-  // Settings pane toggle
-  if (aiSettingsBtn && aiKeyPane && aiKeyInput) {
-    aiSettingsBtn.addEventListener('click', () => {
-      const hidden = aiKeyPane.classList.contains('hidden');
-      if (hidden) {
-        aiKeyPane.classList.remove('hidden');
-        aiKeyPane.classList.add('flex');
-        aiKeyInput.value = getApiKey();
-        aiKeyInput.focus();
-      } else {
-        aiKeyPane.classList.add('hidden');
-        aiKeyPane.classList.remove('flex');
-      }
-    });
-  }
-
-  if (aiKeyCancel && aiKeyPane) {
-    aiKeyCancel.addEventListener('click', () => {
-      aiKeyPane.classList.add('hidden');
-      aiKeyPane.classList.remove('flex');
-    });
-  }
-
-  if (aiKeySave && aiKeyPane && aiKeyInput) {
-    aiKeySave.addEventListener('click', () => {
-      const keyVal = aiKeyInput.value.trim();
-      if (keyVal) {
-        localStorage.setItem('gemini_api_key', keyVal);
-        appendTerminalMsg('system', '✓ Gemini API key saved successfully.');
-        aiKeyPane.classList.add('hidden');
-        aiKeyPane.classList.remove('flex');
-        aiTerminalInput.focus();
-      } else {
-        alert('Please enter a valid API Key.');
-      }
-    });
-  }
-
-  // Helper to append messages
-  function appendTerminalMsg(sender, text) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'flex items-start gap-2';
-    if (sender === 'user') {
-      msgDiv.innerHTML = `
-        <span class="text-[#28C840] select-none">guest:~$</span>
-        <span class="text-accent">${escapeHTML(text)}</span>
-      `;
-    } else if (sender === 'ai') {
-      msgDiv.innerHTML = `
-        <span class="text-[#28C840] select-none">ai-assistant:~$</span>
-        <span class="text-text terminal-ai-msg">${formatAIResponse(text)}</span>
-      `;
-    } else {
-      msgDiv.innerHTML = `
-        <span class="text-muted select-none">//</span>
-        <span class="terminal-system-msg">${escapeHTML(text)}</span>
-      `;
-    }
-    aiTerminalOutput.appendChild(msgDiv);
-    aiTerminalOutput.scrollTop = aiTerminalOutput.scrollHeight;
-  }
-
-  function escapeHTML(str) {
-    // Build entity strings via concatenation to prevent auto-formatting from converting them
-    const entities = {
-      '&': '&' + 'amp;',
-      '<': '&' + 'lt;',
-      '>': '&' + 'gt;',
-      "'": '&#' + '39;',
-      '"': '&' + 'quot;'
-    };
-    return str.replace(/[&<>'"]/g, tag => entities[tag] || tag);
-  }
-
-  function formatAIResponse(text) {
-    // First escape all HTML to prevent XSS
-    let formatted = escapeHTML(text);
-    // Convert markdown links [text](url) to anchor tags
-    formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener" class="text-accent underline">$1</a>');
-    // Convert inline code `code` to styled code elements
-    formatted = formatted.replace(/`([^`]+)`/g,
-      '<code class="bg-white/5 px-1 py-0.5 rounded text-accent font-mono text-xs">$1</code>');
-    // Convert markdown bullet points to • symbols
-    formatted = formatted.replace(/^\s*[-*]\s+(.*)$/gm, '• $1');
-    // Convert newlines to line breaks
-    return formatted.replace(/\n/g, '<br>');
-  }
-
-  // Question submission handling
-  aiTerminalForm.addEventListener('submit', async e => {
+  // Form submit
+  chatForm.addEventListener('submit', e => {
     e.preventDefault();
-    const question = aiTerminalInput.value.trim();
-    if (!question) return;
-    appendTerminalMsg('user', question);
-    aiTerminalInput.value = '';
+    const q = chatInput.value.trim();
+    if (q) sendMessage(q);
+  });
 
-    const key = getApiKey();
+  // Handle Enter key (not Shift+Enter)
+  chatInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      chatForm.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  async function sendMessage(text) {
+    chatInput.value = '';
+    hideSuggestions();
+    addMessage('user', text);
+
+    const key = getKey();
     if (!key) {
-      appendTerminalMsg('system', 'Error: No Gemini API Key configured. Click the settings icon to add one.');
+      addMessage('system', 'No API key configured. Click settings to add one.');
       return;
     }
 
-    const loaderDiv = document.createElement('div');
-    loaderDiv.className = 'flex items-start gap-2 text-muted';
-    loaderDiv.innerHTML = `
-      <span class="text-[#28C840] select-none">ai-assistant:~$</span>
-      <span class="terminal-loading-dots">Analyzing query</span>
-    `;
-    aiTerminalOutput.appendChild(loaderDiv);
-    aiTerminalOutput.scrollTop = aiTerminalOutput.scrollHeight;
+    const typing = addTyping();
 
     try {
-      if (!window.PERSONA_DATA) {
-        throw new Error('Persona data is not loaded.');
-      }
-      if (typeof window.callGemini !== 'function') {
-        throw new Error('Gemini API helper is not loaded.');
-      }
-      const systemPrompt = `${window.PERSONA_DATA.systemInstruction}\n\nHere is my official portfolio persona data:\n${JSON.stringify(window.PERSONA_DATA, null, 2)}\n\nRecruiter's question: ${question}`;
-      const reply = await window.callGemini(systemPrompt);
-      loaderDiv.remove();
-      appendTerminalMsg('ai', reply);
+      const prompt = `${window.PERSONA_DATA.systemInstruction}\n\nMy portfolio data:\n${JSON.stringify(window.PERSONA_DATA)}\n\nQuestion: ${text}`;
+      const reply = await callGemini(prompt);
+      typing.remove();
+      addMessage('ai', reply);
     } catch (err) {
-      loaderDiv.remove();
-      appendTerminalMsg('system', `API Error: ${err.message}. Please verify your API Key in Settings.`);
+      typing.remove();
+      addMessage('system', err.message || 'Failed to get response.');
     }
-  });
+  }
+
+  function addMessage(type, text) {
+    const div = document.createElement('div');
+    if (type === 'user') {
+      div.className = 'chat-msg chat-msg-user';
+      div.textContent = text;
+    } else if (type === 'ai') {
+      div.className = 'chat-msg chat-msg-ai';
+      div.innerHTML = formatResponse(text);
+    } else {
+      div.className = 'chat-msg-system';
+      div.textContent = text;
+    }
+    messages.appendChild(div);
+    scrollDown();
+  }
+
+  function addTyping() {
+    const div = document.createElement('div');
+    div.className = 'chat-typing';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messages.appendChild(div);
+    scrollDown();
+    return div;
+  }
+
+  function scrollDown() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function hideSuggestions() {
+    if (suggestions) suggestions.style.display = 'none';
+  }
+
+  function formatResponse(text) {
+    let s = escapeHTML(text);
+    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-accent underline">$1</a>');
+    s = s.replace(/`([^`]+)`/g, '<code class="bg-white/5 px-1 rounded text-accent text-xs">$1</code>');
+    s = s.replace(/^\s*[-*]\s+(.*)$/gm, '• $1');
+    return s.replace(/\n/g, '<br>');
+  }
+
+  function escapeHTML(str) {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' };
+    return str.replace(/[&<>'"]/g, c => map[c]);
+  }
 }
 
-window.initAIAssistant = initAIAssistant;
+window.initAIChat = initAIChat;
